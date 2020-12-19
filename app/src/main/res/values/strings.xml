@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Today\'s Weather</string>
+    <string name="temperature">Temperature : %1$s°C</string>
+    <string name="feels_like_temperature">Feels like : %1$s°C</string>
+    <string name="max_temperature">Max temperature : %1$s°C</string>
+    <string name="min_temperature">Min temperature : %1$s°C</string>
+    <string name="pressure">Pressure : %1$s</string>
+    <string name="humidity">Humidity : %1$s</string>
+    <string name="wind_speed">Wind speed : %1$skm/h</string>
+    <string name="city_search">Search for your city</string>
+    <string name="search_label">SEARCH</string>
+</resources>
