@@ -28,8 +28,10 @@ class TodayWeatherViewModel(private val weatherRepository: WeatherRepository) : 
     val displayedPressure = ObservableField("")
     val displayedHumidity = ObservableField("")
     val displayedWindSpeed = ObservableField("")
-    val status = ObservableField(Status.COMPLETE)
 
+    //Observable of status enum
+    //UI items visibility will be set according to it
+    val status = ObservableField(Status.COMPLETE)
 
     //Trigger UI refresh by passing a city and store last emitted value
     @ExperimentalCoroutinesApi

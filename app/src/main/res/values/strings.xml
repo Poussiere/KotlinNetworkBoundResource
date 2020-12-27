@@ -9,4 +9,5 @@
     <string name="wind_speed">Wind speed : %1$skm/h</string>
     <string name="city_search">Search for your city</string>
     <string name="search_label">SEARCH</string>
+    <string name="error_text">Oops, something wrong happened.</string>
 </resources>
