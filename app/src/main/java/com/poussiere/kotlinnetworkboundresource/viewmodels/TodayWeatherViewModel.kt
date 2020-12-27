@@ -5,15 +5,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.poussiere.kotlinnetworkboundresource.model.local.WeatherForADay
 import com.poussiere.kotlinnetworkboundresource.repositories.WeatherRepository
-import com.poussiere.kotlinnetworkboundresource.services.remote.FetchError
-import com.poussiere.kotlinnetworkboundresource.services.remote.FetchSuccess
+import com.poussiere.kotlinnetworkboundresource.services.remote.*
+import com.poussiere.kotlinnetworkboundresource.ui.utils.Status
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.*
-import timber.log.Timber
 
 @InternalCoroutinesApi
 @ExperimentalCoroutinesApi
@@ -29,6 +28,7 @@ class TodayWeatherViewModel(private val weatherRepository: WeatherRepository) : 
     val displayedPressure = ObservableField("")
     val displayedHumidity = ObservableField("")
     val displayedWindSpeed = ObservableField("")
+    val status = ObservableField(Status.COMPLETE)
 
 
     //Trigger UI refresh by passing a city and store last emitted value
@@ -52,16 +52,36 @@ class TodayWeatherViewModel(private val weatherRepository: WeatherRepository) : 
     @FlowPreview
     @ExperimentalCoroutinesApi
     private fun loadTodaysWeatherForACity() {
-        todayWeatherChannel.asFlow().flatMapLatest{ city ->
-            //Todo : enable loading spinner here
-            weatherRepository.getTodayWeather(city)
-        }
-            .onEach { fetchedWeather ->
-                if (fetchedWeather is FetchSuccess) {
-                    fetchedWeather.data.populateViewModel()
-                }
-            }
+        todayWeatherChannel.asFlow()
+            .onEach { status.set(Status.LOADING) }
+            .flowOn(Dispatchers.Main)
+            .flatMapLatest { city -> weatherRepository.getWeatherOrError(city) }
+            .flowOn(Dispatchers.Default)
+            .onEach { result -> result.updateUi()}
+            .flowOn(Dispatchers.Main)
             .launchIn(viewModelScope)
+    }
+
+    /**
+     * Update UI according to status and data
+     */
+    private fun FetchResult<WeatherForADay>.updateUi(){
+      when(this) {
+          is FetchSuccess -> {
+              this.data.populateViewModel()
+              status.set(Status.COMPLETE)
+          }
+          is FetchRefreshing -> {
+              this.data.populateViewModel()
+              status.set(Status.REFRESHING)
+          }
+          is FetchLoading -> {
+              status.set(Status.LOADING)
+          }
+          is FetchError -> {
+              status.set(Status.ERROR)
+          }
+      }
     }
 
     /**

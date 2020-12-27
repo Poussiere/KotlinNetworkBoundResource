@@ -4,7 +4,7 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-kapt'
 
-//Load API key from unversionned file
+//Load API key from unversioned file
 def apikeyPropertiesFile = rootProject.file("apikey.properties")
 def apikeyProperties = new Properties()
 apikeyProperties.load(new FileInputStream(apikeyPropertiesFile))
@@ -55,8 +55,8 @@ android {
 
 dependencies {
     implementation libraries
-    implementation arch_libraries
     kapt librariesKapt
     testImplementation testLibraries
     androidTestImplementation androidTestLibraries
 }
+

@@ -8,10 +8,9 @@ import org.joda.time.LocalDateTime
 
 @Entity
 data class WeatherForADay (
-    @PrimaryKey(autoGenerate = true)
-    val uniqueID: Int = 0,
-    @TypeConverters(DateConverter::class)
+    @PrimaryKey(autoGenerate = false)
     val city: String,
+    @TypeConverters(DateConverter::class)
     val date : LocalDateTime,
     val temp: Float,
     val feelsLike: Float,

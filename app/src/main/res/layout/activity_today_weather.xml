@@ -8,22 +8,27 @@
         <variable
             name="viewModel"
             type="com.poussiere.kotlinnetworkboundresource.viewmodels.TodayWeatherViewModel"/>
+        <variable
+            name="status"
+            type="com.poussiere.kotlinnetworkboundresource.ui.utils.Status"/>
     </data>
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 <androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/mainContainerId"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
     <TextView
         android:id="@+id/weatherDateId"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="@{viewModel.displayedDate}"
+        tools:text="23/08/85"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
     <EditText
         android:id="@+id/weatherCityId"
         android:layout_width="wrap_content"
@@ -116,4 +121,10 @@
         app:layout_constraintTop_toTopOf="@+id/weatherCityId" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|end"
+            android:visibility="@{(viewModel.status == status.REFRESHING) || (viewModel.status == status.LOADING)}"/>
+    </FrameLayout>
 </layout>

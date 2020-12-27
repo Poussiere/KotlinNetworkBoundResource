@@ -6,8 +6,10 @@ package com.poussiere.kotlinnetworkboundresource.services.remote
 
 sealed class FetchResult<out T>
 
-//Loading class  can contain data if offline data exist in database
-data class FetchLoading<out T>(val data: T?): FetchResult<T>()
+data class FetchRefreshing<out T>(val data: T): FetchResult<T>()
+
+//Loading class
+object FetchLoading: FetchResult <Nothing>()
 
 //Data fetched from database when loading is over
 data class FetchSuccess<out T>(val data: T): FetchResult<T>()

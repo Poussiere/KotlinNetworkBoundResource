@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder
 import com.poussiere.kotlinnetworkboundresource.BuildConfig
 import com.poussiere.kotlinnetworkboundresource.model.remote.TodayWeatherDataResponse
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
@@ -31,11 +32,27 @@ class RemoteDataSource {
         return flow {
             emit(
                 FetchSuccess(
-                        openWeatherApiService . getTodayWeather (
+                    openWeatherApiService.getTodayWeather(
                         city = city,
-                units = BuildConfig.OPEN_WEATHER_API_UNITS,
-                apiKey = BuildConfig.OPEN_WEATHER_API_KEY
-            )))
+                        units = BuildConfig.OPEN_WEATHER_API_UNITS,
+                        apiKey = BuildConfig.OPEN_WEATHER_API_KEY
+                    )
+                )
+            )
+        }
+    }
+
+    @ExperimentalCoroutinesApi
+    fun getWeather(city: String): Flow<TodayWeatherDataResponse> {
+        return flow {
+            delay(6000)
+            emit(
+                openWeatherApiService.getTodayWeather(
+                    city = city,
+                    units = BuildConfig.OPEN_WEATHER_API_UNITS,
+                    apiKey = BuildConfig.OPEN_WEATHER_API_KEY
+                )
+            )
         }
     }
 }
